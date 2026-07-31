@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Hub — Food & Drinks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E1F22;
+    --paper:#ffffff;
+    --mist:#F7EFEA;
+    --cream:#D7B6A9;
+    --red:#F95700;
+    --red-dark:#D94A00;
+    --lime:#62413E;
+    --line: rgba(46,31,34,0.14);
+    --muted: rgba(46,31,34,0.65);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5vw;
+    background:linear-gradient(135deg, #2E1F22 0%, #1F1517 100%);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--red);
+  }
+
+  .logo{
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-badge{
+    display:flex; align-items:center;
+    line-height:1;
+  }
+  .logo-badge img{
+    height:42px;
+    width:auto;
+    display:block;
+  }
+  .logo-mark{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Baloo 2', cursive;
+    font-weight:800;
+    font-size:1.25rem;
+    color:#ffffff;
+    white-space:nowrap;
+  }
+  .logo-mark .cup{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:var(--red);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem;
+    flex-shrink:0;
+  }
+  .footer-brand .logo-mark{ color:#fff; }
+
+  nav.main-nav ul{
+    display:flex; gap:36px;
+  }
+  nav.main-nav a{
+    font-weight:700;
+    font-size:0.95rem;
+    letter-spacing:0.02em;
+    color:#ffffff;
+    position:relative;
+    padding:6px 0;
+    transition:color .25s ease;
+  }
+  nav.main-nav a::after{
+    content:"";
+    position:absolute; left:0; bottom:0;
+    width:0%; height:2px;
+    background:var(--cream);
+    transition:width .3s ease;
+  }
+  nav.main-nav a:hover{ color:var(--cream); }
+  nav.main-nav a:hover::after{ width:100%; }
+  nav.main-nav a.active{ color:var(--red); }
+  nav.main-nav a.active::after{ width:100%; background:var(--red); }
+
+  .burger{
+    display:none;
+    flex-direction:column; gap:5px;
+    background:none; border:none; cursor:pointer;
+  }
+  .burger span{
+    width:26px; height:2px; background:#ffffff; border-radius:2px;
+  }
+
+  /* ---------- PAGE HERO (small) ---------- */
+  .page-hero{
+    max-width:1280px;
+    margin:0 auto;
+    padding:56px 5vw 8px;
+    text-align:center;
+    background:var(--red);
+    color:#fff;
+  }
+  .page-hero .about-eyebrow{ justify-content:center; color:#ffffff; }
+  .page-hero .about-eyebrow::after{ background:#ffffff; }
+  .page-hero h1{
+    margin-top:14px;
+    font-size:clamp(2rem, 4vw, 3rem);
+    color:#ffffff;
+  }
+  .page-hero h1 .accent{ color:var(--ink); }
+  .page-hero p{
+    max-width:560px;
+    margin:16px auto 0;
+    color:rgba(255,255,255,0.85);
+    line-height:1.7;
+  }
+
+  /* ---------- MAP ---------- */
+  .map-wrap{
+    max-width:1280px;
+    margin:36px auto 0;
+    padding:0 5vw;
+  }
+  .map-frame{
+    position:relative;
+    width:100%;
+    height:420px;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(46,31,34,0.16);
+    border:1px solid var(--line);
+  }
+  .map-frame iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    filter:grayscale(12%) contrast(1.02);
+  }
+  .map-pin-badge{
+    position:absolute;
+    left:24px; bottom:24px;
+    background:var(--ink);
+    color:#fff;
+    padding:14px 20px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    box-shadow:0 14px 30px rgba(46,31,34,0.3);
+    max-width:280px;
+  }
+  .map-pin-badge .pin-ico{
+    width:38px; height:38px;
+    border-radius:50%;
+    background:var(--red);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    font-size:1.05rem;
+  }
+  .map-pin-badge strong{
+    display:block;
+    font-family:'Baloo 2';
+    font-size:0.9rem;
+  }
+  .map-pin-badge span{
+    display:block;
+    font-size:0.76rem;
+    color:rgba(255,255,255,0.7);
+    margin-top:2px;
+    line-height:1.4;
+  }
+
+  /* ---------- CONTACT INFO CARDS ---------- */
+  .contact-cards{
+    max-width:1280px;
+    margin:64px auto 0;
+    padding:0 5vw;
+  }
+  .contact-cards-head{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 44px;
+  }
+  .contact-cards-head .about-eyebrow{ justify-content:center; }
+  .contact-cards-head h2{
+    margin-top:16px;
+    font-size:clamp(1.9rem, 3vw, 2.7rem);
+    line-height:1.15;
+  }
+  .contact-cards-head h2 .accent{ color:var(--red); }
+  .contact-cards-head p{
+    margin-top:16px;
+    color:var(--muted);
+    line-height:1.7;
+  }
+
+  .cards-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:26px;
+  }
+  .info-card{
+    background:var(--mist);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:32px 28px;
+    text-align:center;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .info-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(46,31,34,0.14);
+    border-color:var(--red);
+  }
+  .info-card .ic{
+    width:64px; height:64px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:var(--ink);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+  }
+  .info-card h3{
+    font-size:1.1rem;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .info-card p, .info-card a{
+    display:block;
+    color:var(--muted);
+    font-size:0.92rem;
+    line-height:1.65;
+  }
+  .info-card a:hover{ color:var(--red-dark); }
+
+  /* ---------- CONTACT (form + details) ---------- */
+  .contact{
+    max-width:1280px;
+    margin:64px auto 0;
+    padding:0 5vw 110px;
+  }
+  .contact-inner{
+    background:linear-gradient(135deg, #2E1F22 0%, #1F1517 100%);
+    border-radius:28px;
+    padding:clamp(32px,5vw,64px);
+    display:grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap:clamp(32px,5vw,60px);
+    align-items:center;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .contact-inner::before{
+    content:"";
+    position:absolute;
+    top:-40%; right:-10%;
+    width:340px; height:340px;
+    background:radial-gradient(circle, rgba(249,87,0,0.35), transparent 70%);
+    z-index:0;
+  }
+  .contact-copy{ position:relative; z-index:1; }
+  .contact-copy .about-eyebrow{ color:var(--cream); }
+  .contact-copy .about-eyebrow::after{ background:var(--cream); }
+  .contact-copy h2{
+    margin-top:16px;
+    font-size:clamp(1.8rem, 2.6vw, 2.3rem);
+    line-height:1.2;
+    color:#fff;
+  }
+  .contact-copy h2 .accent{ color:var(--red); }
+  .contact-copy p{
+    margin-top:14px;
+    color:rgba(255,255,255,0.65);
+    line-height:1.7;
+    max-width:420px;
+    font-size:0.95rem;
+  }
+
+  .contact-details{
+    position:relative; z-index:1;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+  .contact-row{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px;
+    padding:18px 20px;
+  }
+  .contact-row .icon{
+    width:42px; height:42px;
+    border-radius:12px;
+    background:var(--red);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    font-size:1.1rem;
+  }
+  .contact-row strong{
+    display:block;
+    font-family:'Baloo 2';
+    font-size:0.95rem;
+    color:#fff;
+    margin-bottom:4px;
+  }
+  .contact-row span, .contact-row a{
+    display:block;
+    color:rgba(255,255,255,0.7);
+    font-size:0.88rem;
+    line-height:1.5;
+  }
+  .contact-row a:hover{ color:#fff; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:linear-gradient(180deg, #2E1F22 0%, #1F1517 100%);
+    color:rgba(255,255,255,0.9);
+    padding:70px 5vw 0;
+    border-top:3px solid var(--red);
+  }
+  .footer-inner{
+    max-width:1280px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:50px;
+    border-bottom:1px solid rgba(215,182,169,0.25);
+  }
+  .footer-brand .logo-badge{
+    background:rgba(255,255,255,0.08);
+    display:inline-flex;
+    padding:10px 16px;
+    border-radius:12px;
+  }
+  .footer-brand .logo-badge img{
+    height:38px;
+  }
+  .footer-brand p{
+    margin-top:18px;
+    font-size:0.88rem;
+    line-height:1.7;
+    max-width:280px;
+    color:rgba(255,255,255,0.85);
+  }
+  .footer-socials{
+    display:flex; gap:10px;
+    margin-top:22px;
+  }
+  .footer-socials a{
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid rgba(215,182,169,0.4);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem;
+    transition:all .2s ease;
+  }
+  .footer-socials a:hover{
+    background:var(--red);
+    border-color:var(--red);
+    transform:translateY(-3px);
+  }
+  footer h4{
+    font-family:'Baloo 2';
+    font-size:1.05rem;
+    color:var(--cream);
+    margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  footer h4::after{
+    content:"";
+    height:2px; flex:1;
+    background:rgba(215,182,169,0.3);
+  }
+  .footer-col ul li{ margin-bottom:12px; }
+  .footer-col ul li a{
+    font-size:0.88rem;
+    color:rgba(255,255,255,0.85);
+    display:flex; align-items:center; gap:8px;
+    transition:color .2s ease, transform .2s ease;
+  }
+  .footer-col ul li a:hover{ color:var(--red); transform:translateX(3px); }
+  .footer-col ul li a .chev{ color:var(--red); font-weight:800; }
+
+  .footer-contact li{
+    margin-bottom:16px;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:0.88rem;
+    color:rgba(255,255,255,0.85);
+    line-height:1.5;
+  }
+  .footer-contact li .ico{ color:var(--red); flex-shrink:0; margin-top:2px; }
+
+  .footer-hours .hours-block{ margin-bottom:16px; }
+  .footer-hours .hours-block strong{
+    display:block;
+    color:var(--cream);
+    font-size:0.9rem;
+    margin-bottom:4px;
+  }
+  .footer-hours .hours-block span{
+    font-size:0.86rem;
+    color:rgba(255,255,255,0.85);
+  }
+
+  .footer-bottom{
+    max-width:1280px;
+    margin:0 auto;
+    padding:22px 0 26px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:12px;
+    font-size:0.8rem;
+    color:rgba(255,255,255,0.75);
+  }
+  .footer-bottom a{ color:var(--cream); }
+  .footer-bottom a:hover{ color:var(--red); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 980px){
+    nav.main-nav{ display:none; }
+    .burger{ display:flex; }
+
+    .cards-grid{ grid-template-columns:1fr; }
+    .contact-inner{ grid-template-columns:1fr; }
+    .footer-inner{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .footer-inner{ grid-template-columns:1fr; }
+    .map-frame{ height:300px; }
+    .map-pin-badge{ left:14px; bottom:14px; max-width:220px; padding:12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <span class="logo-badge">
+      <img src="cafehub-logo.png" alt="Cafe Hub logo">
+    </span>
+  </a>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="testimonial.html">Testimonial</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <button class="burger" aria-label="menu" id="burgerBtn"><span></span><span></span><span></span></button>
+</header>
+
+<section class="page-hero">
+  <span class="about-eyebrow">Contact</span>
+  <h1>Do You Have Any <span class="accent">Questions?</span></h1>
+  <p>We'd love to hear from you. Drop by for a cold juice, ring ahead to check what's fresh, or send us a message below.</p>
+</section>
+
+<div class="map-wrap">
+  <div class="map-frame">
+    <iframe
+      src="https://www.google.com/maps?q=Mahindra+World+City,+Veerapuram,+Chengalpattu,+Tamil+Nadu+603002&output=embed"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Cafe Hub location map"></iframe>
+    <div class="map-pin-badge">
+      <span class="pin-ico">📍</span>
+      <div>
+        <strong>Cafe Hub</strong>
+        <span>1/66, Veerapuram, Mahendra World City (Opp. Dine Time Restaurant)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="contact-cards">
+  <div class="cards-grid">
+    <div class="info-card">
+      <span class="ic">📍</span>
+      <h3>Visit Us</h3>
+      <p>1/66, Veerapuram, Mahendra World City<br>(Opp. Dine Time Restaurant)</p>
+    </div>
+    <div class="info-card">
+      <span class="ic">📞</span>
+      <h3>Call Us</h3>
+      <a href="tel:+919847187841">9847187841</a>
+      <a href="tel:+917092047938">7092047938</a>
+    </div>
+    <div class="info-card">
+      <span class="ic">🕒</span>
+      <h3>Opening Hours</h3>
+      <p>Sunday – Saturday<br>10:00 AM – 2:00 AM</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-copy">
+      <span class="about-eyebrow">Contact</span>
+      <h2>Drop by or give us a <span class="accent">call</span></h2>
+      <p>Right opposite Dine Time Restaurant — swing in for a cold juice or ring ahead to check what's fresh today.</p>
+    </div>
+
+    <div class="contact-details">
+      <div class="contact-row">
+        <span class="icon">📍</span>
+        <div>
+          <strong>Visit Us</strong>
+          <span>1/66, Veerapuram, Mahendra World City<br>(Opp. Dine Time Restaurant)</span>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="icon">📞</span>
+        <div>
+          <strong>Call Us</strong>
+          <a href="tel:+919847187841">9847187841</a>
+          <a href="tel:+917092047938">7092047938</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="icon">🕒</span>
+        <div>
+          <strong>Opening Hours</strong>
+          <span>Sunday – Saturday: 10:00 AM – 2:00 AM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="logo-badge">
+        <img src="cafehub-logo.png" alt="Cafe Hub logo">
+      </span>
+      <p>Cold-pressed juices, thick shakes, falooda, kunafa and hearty bites — made fresh, served fast, right opposite Dine Time Restaurant.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html"><span class="chev">›</span> About Us</a></li>
+        <li><a href="contact.html"><span class="chev">›</span> Contact Us</a></li>
+        <li><a href="menu.html"><span class="chev">›</span> Menu</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li><span class="ico">📍</span> 1/66, Veerapuram, Mahendra World City (Opp. Dine Time Restaurant)</li>
+        <li><span class="ico">📞</span> 9847187841, 7092047938</li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-hours">
+      <h4>Opening</h4>
+      <div class="hours-block">
+        <strong>Sunday – Saturday</strong>
+        <span>10:00 AM – 2:00 AM</span>
+      </div>
+      <span style="font-size:0.8rem; color:rgba(255,255,255,0.75);">Open every day, including public holidays.</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Cafe Hub. All rights reserved.</span>
+  </div>
+</footer>
+<script>
+  document.getElementById('burgerBtn').addEventListener('click', () => {
+    document.querySelector('nav.main-nav').classList.toggle('open');
+  });
+
+</script>
+</body></html>
