@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Hub — Food & Drinks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E1F22;
+    --paper:#ffffff;
+    --mist:#F7EFEA;
+    --cream:#D7B6A9;
+    --sage:#D7B6A9;
+    --blush:#F7EFEA;
+    --espresso:#F95700;
+    --red:#F95700;
+    --red-dark:#D94A00;
+    --lime:#62413E;
+    --line: rgba(46,31,34,0.14);
+    --muted: rgba(46,31,34,0.65);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- HEADER ---------- */
+   header{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5vw;
+    background:linear-gradient(135deg, #2E1F22 0%, #1F1517 100%);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--red);
+  }
+
+  .logo{
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-badge{
+    display:flex; align-items:center;
+    line-height:1;
+  }
+  .logo-badge img{
+    height:42px;
+    width:auto;
+    display:block;
+  }
+
+  nav.main-nav ul{
+    display:flex; gap:36px;
+  }
+  nav.main-nav a{
+    font-weight:700;
+    font-size:0.95rem;
+    letter-spacing:0.02em;
+    color:#ffffff;
+    position:relative;
+    padding:6px 0;
+    transition:color .25s ease;
+  }
+  nav.main-nav a::after{
+    content:"";
+    position:absolute; left:0; bottom:0;
+    width:0%; height:2px;
+    background:var(--cream);
+    transition:width .3s ease;
+  }
+  nav.main-nav a:hover{ color:var(--cream); }
+  nav.main-nav a:hover::after{ width:100%; }
+  nav.main-nav a.active{ color:var(--red); }
+  nav.main-nav a.active::after{ width:100%; background:var(--red); }
+
+  .burger{
+    display:none;
+    flex-direction:column; gap:5px;
+    background:none; border:none; cursor:pointer;
+  }
+  .burger span{
+    width:26px; height:2px; background:#ffffff; border-radius:2px;
+  }
+
+  /* ===================================================================
+     HERO — static layout (text + button + thumbnail row / big plate photo)
+     =================================================================== */
+  .hero{
+    position:relative;
+    max-width:1480px;
+    margin:0 auto;
+    padding:90px 5vw 70px;
+    display:flex;
+    align-items:center;
+    gap:60px;
+    overflow:hidden;
+  }
+  .hero::before,
+  .hero::after{
+    content:"";
+    position:absolute;
+    top:-40px;
+    bottom:-40px;
+    width:90px;
+    z-index:0;
+  }
+  .hero::before{
+    right:340px;
+    background:var(--cream);
+    transform:skewX(-8deg);
+  }
+  .hero::after{
+    right:250px;
+    background:var(--red);
+    transform:skewX(-8deg);
+  }
+  .hero-text{
+    position:relative;
+    z-index:2;
+    flex:1 1 46%;
+    max-width:560px;
+  }
+  .hero-script{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(1.3rem, 2vw, 1.6rem);
+    color:var(--red);
+  }
+  .hero-title{
+    margin-top:6px;
+    font-size:clamp(2.6rem, 5vw, 4.2rem);
+    line-height:1.12;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  .hero-title .accent{ color:var(--red); }
+  .hero-desc{
+    margin-top:22px;
+    font-size:1rem;
+    line-height:1.8;
+    color:var(--muted);
+    max-width:460px;
+  }
+  .hero-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-top:32px;
+    background:var(--red);
+    color:#ffffff;
+    font-weight:800;
+    font-size:0.92rem;
+    letter-spacing:0.03em;
+    padding:16px 30px;
+    border-radius:999px;
+    box-shadow:0 14px 28px rgba(249,87,0,0.3);
+    transition:transform .2s ease, background .2s ease;
+  }
+  .hero-cta:hover{ transform:translateY(-3px); background:var(--red-dark); }
+
+  .hero-thumbs{
+    display:flex;
+    gap:16px;
+    margin-top:40px;
+  }
+  .hero-thumb{
+    width:96px;
+    height:96px;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 22px rgba(0,0,0,0.15);
+    border:3px solid #ffffff;
+    transition:transform .25s ease;
+  }
+  .hero-thumb:hover{ transform:translateY(-4px); }
+  .hero-thumb img{ width:100%; height:100%; object-fit:cover; }
+
+  .hero-photo-wrap{
+    position:relative;
+    z-index:2;
+    flex:1 1 46%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .hero-photo{
+    width:min(100%, 460px);
+    aspect-ratio:1/1;
+    border-radius:50%;
+    overflow:hidden;
+    border:8px solid #ffffff;
+    box-shadow:0 30px 60px rgba(0,0,0,0.22);
+  }
+  .hero-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  @media (max-width: 980px){
+    nav.main-nav{ display:none; }
+    .burger{ display:flex; }
+    .hero{ flex-direction:column-reverse; align-items:center; padding:44px 5vw; gap:32px; }
+    .hero::before, .hero::after{ display:none; }
+    .hero-text{ max-width:100%; text-align:center; }
+    .hero-desc{ margin-left:auto; margin-right:auto; }
+    .hero-thumbs{ justify-content:center; }
+    .hero-photo{ width:min(80%, 340px); }
+  }
+  @media (max-width: 560px){
+    .hero-thumb{ width:76px; height:76px; border-radius:14px; }
+  }
+
+  /* ---------- MENU HIGHLIGHTS SLIDER (home page) ---------- */
+  .mh-section{
+    max-width:1280px;
+    margin:10px auto 0;
+    padding:20px 5vw 10px;
+    background:#ffffff;
+  }
+  .mh-head{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 40px;
+  }
+  .mh-head .about-eyebrow{ justify-content:center; }
+  .mh-head h2{
+    margin-top:16px;
+    font-size:clamp(1.9rem, 3vw, 2.6rem);
+    line-height:1.15;
+  }
+  .mh-head h2 .accent{ color:var(--red); }
+  .mh-head p{
+    margin-top:14px;
+    color:var(--muted);
+    line-height:1.7;
+  }
+  .about-eyebrow{
+    display:flex; align-items:center; gap:12px;
+    color:var(--red);
+    font-weight:800;
+    font-size:0.85rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .about-eyebrow::after{
+    content:"";
+    height:2px; width:46px;
+    background:var(--red);
+    display:inline-block;
+  }
+  .mh-track-wrap{
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+            mask-image:linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+  .mh-track{
+    display:flex;
+    gap:20px;
+    width:max-content;
+    animation: scrollRight 34s linear infinite;
+  }
+  .mh-track-wrap:hover .mh-track{ animation-play-state:paused; }
+  @keyframes scrollRight{
+    0%{ transform:translateX(-50%); }
+    100%{ transform:translateX(0%); }
+  }
+  .mh-card{
+    flex:0 0 auto;
+    width:172px;
+    background:var(--mist);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:0 0 18px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .mh-card .mh-photo{
+    width:100%;
+    height:110px;
+    overflow:hidden;
+    margin-bottom:14px;
+  }
+  .mh-card .mh-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .mh-card h4{
+    font-family:'Baloo 2';
+    font-size:0.98rem;
+    color:var(--ink);
+    margin-bottom:6px;
+    line-height:1.3;
+    padding:0 12px;
+  }
+  .mh-card .mh-price{
+    font-family:'Baloo 2';
+    font-weight:700;
+    color:var(--red);
+    font-size:0.92rem;
+  }
+  .mh-card .mh-price::before{ content:"₹"; opacity:0.65; margin-right:1px; }
+
+  /* ---------- FULL MENU PREVIEW ---------- */
+  .menu-full{
+    max-width:1280px;
+    margin:0 auto;
+    padding:40px 5vw 110px;
+    background:#ffffff;
+    border-radius:32px;
+    border:2px solid var(--line);
+  }
+  .menu-full-head{
+    text-align:center;
+    max-width:640px;
+    margin:0 auto 44px;
+  }
+  .menu-full-head .about-eyebrow{ justify-content:center; }
+  .menu-full-head h2{
+    margin-top:16px;
+    font-size:clamp(1.9rem, 3vw, 2.7rem);
+    line-height:1.15;
+  }
+  .menu-full-head h2 .accent{ color:var(--red); }
+  .menu-full-head p{
+    margin-top:16px;
+    color:var(--muted);
+    line-height:1.7;
+  }
+  .menu-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:40px;
+  }
+  .menu-tab{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    font-weight:700;
+    font-size:0.88rem;
+    padding:12px 20px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .menu-tab .ico{ font-size:1rem; }
+  .menu-tab:hover{ border-color:var(--red); color:var(--red); }
+  .menu-tab.active{
+    background:var(--red);
+    color:#fff;
+    border-color:var(--red);
+    box-shadow:0 10px 22px rgba(249,87,0,0.25);
+  }
+  .dish-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:26px;
+  }
+  .dish-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    overflow:hidden;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .dish-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    border-color:var(--red);
+  }
+  .dish-card.is-hidden{ display:none; }
+  .dish-photo{
+    height:150px;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .dish-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .dish-photo .dish-fav{
+    position:absolute; top:10px; right:10px;
+    background:var(--red);
+    color:#fff;
+    font-family:'Baloo 2';
+    font-weight:700;
+    font-size:0.65rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:999px;
+    z-index:2;
+  }
+  .dish-body{ padding:18px 20px 22px; }
+  .dish-tag{
+    display:inline-block;
+    font-family:'Manrope';
+    font-weight:800;
+    font-size:0.66rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--red);
+  }
+  .dish-card h4{
+    font-family:'Baloo 2';
+    font-size:1.08rem;
+    color:var(--ink);
+    margin:8px 0 10px;
+    line-height:1.3;
+  }
+  .dish-price{
+    font-family:'Baloo 2';
+    font-weight:700;
+    color:var(--ink);
+    font-size:1rem;
+  }
+  .dish-price::before{ content:"₹"; opacity:0.6; margin-right:1px; }
+  .menu-preview .menu-note-row{ text-align:center; margin-top:28px; }
+  .btn-primary{
+    display:inline-block;
+    background:var(--red);
+    color:#fff;
+    font-weight:800;
+    padding:15px 28px;
+    border-radius:999px;
+    font-size:0.9rem;
+    box-shadow:0 10px 24px rgba(249,87,0,0.35);
+    transition:transform .2s ease, background .2s ease;
+    white-space:nowrap;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-primary:hover{ transform:translateY(-3px); background:var(--red-dark); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:linear-gradient(180deg, #2E1F22 0%, #1F1517 100%);
+    color:rgba(255,255,255,0.9);
+    padding:70px 5vw 0;
+    border-top:3px solid var(--red);
+  }
+  .footer-inner{
+    max-width:1280px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:50px;
+    border-bottom:1px solid rgba(215,182,169,0.25);
+  }
+  .footer-brand .logo-badge{
+    background:rgba(255,255,255,0.08);
+    display:inline-flex;
+    padding:10px 16px;
+    border-radius:12px;
+  }
+  .footer-brand .logo-badge img{ height:38px; }
+  .footer-brand p{
+    margin-top:18px;
+    font-size:0.88rem;
+    line-height:1.7;
+    max-width:280px;
+    color:rgba(255,255,255,0.85);
+  }
+  .footer-socials{ display:flex; gap:10px; margin-top:22px; }
+  .footer-socials a{
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid rgba(215,182,169,0.4);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem;
+    transition:all .2s ease;
+  }
+  .footer-socials a:hover{ background:var(--red); border-color:var(--red); transform:translateY(-3px); }
+  footer h4{
+    font-family:'Baloo 2';
+    font-size:1.05rem;
+    color:var(--cream);
+    margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  footer h4::after{ content:""; height:2px; flex:1; background:rgba(215,182,169,0.3); }
+  .footer-col ul li{ margin-bottom:12px; }
+  .footer-col ul li a{
+    font-size:0.88rem;
+    color:rgba(255,255,255,0.85);
+    display:flex; align-items:center; gap:8px;
+    transition:color .2s ease, transform .2s ease;
+  }
+  .footer-col ul li a:hover{ color:var(--red); transform:translateX(3px); }
+  .footer-col ul li a .chev{ color:var(--red); font-weight:800; }
+  .footer-contact li{
+    margin-bottom:16px;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:0.88rem;
+    color:rgba(255,255,255,0.85);
+    line-height:1.5;
+  }
+  .footer-contact li .ico{ color:var(--red); flex-shrink:0; margin-top:2px; }
+  .footer-hours .hours-block{ margin-bottom:16px; }
+  .footer-hours .hours-block strong{ display:block; color:var(--cream); font-size:0.9rem; margin-bottom:4px; }
+  .footer-hours .hours-block span{ font-size:0.86rem; color:rgba(255,255,255,0.85); }
+  .footer-bottom{
+    max-width:1280px;
+    margin:0 auto;
+    padding:22px 0 26px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:12px;
+    font-size:0.8rem;
+    color:rgba(255,255,255,0.75);
+  }
+  .footer-bottom a{ color:var(--cream); }
+  .footer-bottom a:hover{ color:var(--red); }
+
+  @media (max-width: 980px){
+    .menu-tabs{ justify-content:flex-start; overflow-x:auto; flex-wrap:nowrap; padding-bottom:6px; }
+    .footer-inner{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .footer-inner{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <span class="logo-badge">
+      <img src="cafehub-logo.png" alt="Cafe Hub logo">
+    </span>
+  </a>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="testimonial.html">Testimonial</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <button class="burger" aria-label="menu" id="burgerBtn"><span></span><span></span><span></span></button>
+</header>
+
+<!-- ===================== HERO (static, no slider) ===================== -->
+<section class="hero" id="home">
+
+  <div class="hero-text">
+    <div class="hero-script">Taste</div>
+    <h1 class="hero-title">Come hungry.<br>Leave <span class="accent">happy</span>.</h1>
+    <p class="hero-desc">
+      Coffee, kunafa, burgers, pizza, milkshakes, ice cream and fresh juices —
+      made fresh, served fast, right opposite Dine Time Restaurant.
+    </p>
+    <a href="menu.html" class="hero-cta">🔍 FIND THE FOOD</a>
+
+    <div class="hero-thumbs">
+      <div class="hero-thumb"><img src="https://images.unsplash.com/photo-1667329829058-ac191ba4a905?auto=format&fit=crop&w=300&q=80" alt="Cheese burger"></div>
+      <div class="hero-thumb"><img src="https://images.unsplash.com/photo-1609159085964-e47ec0804449?auto=format&fit=crop&w=300&q=80" alt="Cheese pizza"></div>
+      <div class="hero-thumb"><img src="https://images.unsplash.com/photo-1630823184409-1c6014968038?auto=format&fit=crop&w=300&q=80" alt="Royal falooda"></div>
+    </div>
+  </div>
+
+  <div class="hero-photo-wrap">
+    <div class="hero-photo">
+      <img src="orange.jpg" alt = "milkshake with ice cream">
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== PROMO / CATEGORY SLIDER ===================== -->
+<section class="mh-section">
+  <div class="mh-head">
+    <span class="about-eyebrow">What we're known for</span>
+    <h2>Popular <span class="accent">Categories</span></h2>
+    <p>Straight off the counter — a scrolling look at the bites people order the most.</p>
+  </div>
+
+  <div class="mh-track-wrap">
+    <div class="mh-track">
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?auto=format&fit=crop&w=400&q=80" alt="Watermelon Juice"></div><h4>Watermelon Juice</h4><span class="mh-price">60</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1667329829058-ac191ba4a905?auto=format&fit=crop&w=400&q=80" alt="Cheese Burger"></div><h4>Cheese Burger</h4><span class="mh-price">110</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1657271511865-f610b280dca4?auto=format&fit=crop&w=400&q=80" alt="Fried Chicken"></div><h4>Fried Chicken</h4><span class="mh-price">129</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1609159085964-e47ec0804449?auto=format&fit=crop&w=400&q=80" alt="Cheese Pizza"></div><h4>Cheese Pizza</h4><span class="mh-price">99</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=400&q=80" alt="Mango Juice"></div><h4>Mango Juice</h4><span class="mh-price">70</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="kunafa.png.png" alt="Kunafa Slice"></div><h4>Kunafa Slice</h4><span class="mh-price">149</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1630823184409-1c6014968038?auto=format&fit=crop&w=400&q=80" alt="Royal Falooda"></div><h4>Royal Falooda</h4><span class="mh-price">120</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1569691899455-88464f6d3ab1?auto=format&fit=crop&w=400&q=80" alt="Chicken Popcorn"></div><h4>Chicken Popcorn</h4><span class="mh-price">119</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?auto=format&fit=crop&w=400&q=80" alt="Watermelon Juice"></div><h4>Watermelon Juice</h4><span class="mh-price">60</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1667329829058-ac191ba4a905?auto=format&fit=crop&w=400&q=80" alt="Cheese Burger"></div><h4>Cheese Burger</h4><span class="mh-price">110</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1657271511865-f610b280dca4?auto=format&fit=crop&w=400&q=80" alt="Fried Chicken"></div><h4>Fried Chicken</h4><span class="mh-price">129</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1609159085964-e47ec0804449?auto=format&fit=crop&w=400&q=80" alt="Cheese Pizza"></div><h4>Cheese Pizza</h4><span class="mh-price">99</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=400&q=80" alt="Mango Juice"></div><h4>Mango Juice</h4><span class="mh-price">70</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1482930172332-2293d7138235?auto=format&fit=crop&w=400&q=80" alt="Kunafa Slice"></div><h4>Kunafa Slice</h4><span class="mh-price">149</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1630823184409-1c6014968038?auto=format&fit=crop&w=400&q=80" alt="Royal Falooda"></div><h4>Royal Falooda</h4><span class="mh-price">120</span></div>
+      <div class="mh-card"><div class="mh-photo"><img src="https://images.unsplash.com/photo-1569691899455-88464f6d3ab1?auto=format&fit=crop&w=400&q=80" alt="Chicken Popcorn"></div><h4>Chicken Popcorn</h4><span class="mh-price">119</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FULL MENU PREVIEW (tabs) ===================== -->
+<section class="menu-full menu-preview" id="menu-preview">
+  <div class="menu-full-head">
+    <span class="about-eyebrow">Our Menu</span>
+    <h2>Explore The <span class="accent">Full Menu</span></h2>
+    <p>From cold-pressed juices to sizzling fried chicken — here's a taste of what's on offer.</p>
+  </div>
+
+  <div class="menu-tabs" id="dishTabs">
+    <div class="menu-tab active" data-filter="all">All</div>
+    <div class="menu-tab" data-filter="juices"><span class="ico">🥤</span> Juices</div>
+    <div class="menu-tab" data-filter="burgers"><span class="ico">🍔</span> Burgers</div>
+    <div class="menu-tab" data-filter="chicken"><span class="ico">🍗</span> Fried Chicken</div>
+    <div class="menu-tab" data-filter="pizza"><span class="ico">🍕</span> Pizza</div>
+    <div class="menu-tab" data-filter="desserts"><span class="ico">🍨</span> Shakes &amp; Desserts</div>
+  </div>
+
+  <div class="dish-grid" id="dishGrid">
+    <div class="dish-card" data-cat="juices">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?auto=format&fit=crop&w=500&q=80" alt="Watermelon Juice"><span class="dish-fav">Bestseller</span></div>
+      <div class="dish-body"><span class="dish-tag">Juices</span><h4>Watermelon Juice</h4><span class="dish-price">60</span></div>
+    </div>
+    <div class="dish-card" data-cat="juices">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&w=500&q=80" alt="Mango Juice"></div>
+      <div class="dish-body"><span class="dish-tag">Juices</span><h4>Mango Juice</h4><span class="dish-price">70</span></div>
+    </div>
+    <div class="dish-card" data-cat="juices">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1602860637860-fa3d04533a07?auto=format&fit=crop&w=500&q=80" alt="Pomegranate Juice"></div>
+      <div class="dish-body"><span class="dish-tag">Juices</span><h4>Pomegranate Juice</h4><span class="dish-price">90</span></div>
+    </div>
+    <div class="dish-card" data-cat="burgers">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1667329829058-ac191ba4a905?auto=format&fit=crop&w=500&q=80" alt="Cheese Burger"><span class="dish-fav">Bestseller</span></div>
+      <div class="dish-body"><span class="dish-tag">Burgers</span><h4>Cheese Burger</h4><span class="dish-price">110</span></div>
+    </div>
+    <div class="dish-card" data-cat="burgers">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1603508102983-99b101395d1a?auto=format&fit=crop&w=500&q=80" alt="Classic Chicken Burger"></div>
+      <div class="dish-body"><span class="dish-tag">Burgers</span><h4>Classic Chicken Burger</h4><span class="dish-price">99</span></div>
+    </div>
+    <div class="dish-card" data-cat="burgers">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=500&q=80" alt="Double Patty Burger"></div>
+      <div class="dish-body"><span class="dish-tag">Burgers</span><h4>Double Patty Burger</h4><span class="dish-price">149</span></div>
+    </div>
+    <div class="dish-card" data-cat="chicken">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1657271511865-f610b280dca4?auto=format&fit=crop&w=500&q=80" alt="Fried Chicken"><span class="dish-fav">Bestseller</span></div>
+      <div class="dish-body"><span class="dish-tag">Fried Chicken</span><h4>Fried Chicken (2 pcs)</h4><span class="dish-price">129</span></div>
+    </div>
+    <div class="dish-card" data-cat="chicken">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1631897788978-da06ec45adcb?auto=format&fit=crop&w=500&q=80" alt="Chicken Wings"></div>
+      <div class="dish-body"><span class="dish-tag">Fried Chicken</span><h4>Chicken Wings</h4><span class="dish-price">139</span></div>
+    </div>
+    <div class="dish-card" data-cat="chicken">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1569691899455-88464f6d3ab1?auto=format&fit=crop&w=500&q=80" alt="Chicken Popcorn"></div>
+      <div class="dish-body"><span class="dish-tag">Fried Chicken</span><h4>Chicken Popcorn</h4><span class="dish-price">119</span></div>
+    </div>
+    <div class="dish-card" data-cat="pizza">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1609159085964-e47ec0804449?auto=format&fit=crop&w=500&q=80" alt="Cheese Pizza Uttapam"></div>
+      <div class="dish-body"><span class="dish-tag">Pizza</span><h4>Cheese Pizza</h4><span class="dish-price">99</span></div>
+    </div>
+    <div class="dish-card" data-cat="pizza">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?auto=format&fit=crop&w=500&q=80" alt="Chicken Pizza Uttapam"></div>
+      <div class="dish-body"><span class="dish-tag">Pizza</span><h4>Chicken Pizza</h4><span class="dish-price">139</span></div>
+    </div>
+    <div class="dish-card" data-cat="desserts">
+      <div class="dish-photo"><img src="https://images.unsplash.com/photo-1630823184409-1c6014968038?auto=format&fit=crop&w=500&q=80" alt="Royal Falooda"><span class="dish-fav">Bestseller</span></div>
+      <div class="dish-body"><span class="dish-tag">Desserts</span><h4>Royal Falooda</h4><span class="dish-price">120</span></div>
+    </div>
+    <div class="dish-card" data-cat="desserts">
+      <div class="dish-photo"><img src="kunafa.png.png" alt="Kunafa Slice"></div>
+      <div class="dish-body"><span class="dish-tag">Desserts</span><h4>Kunafa Slice</h4><span class="dish-price">149</span></div>
+    </div>
+  </div>
+
+  <div class="menu-note-row">
+    <a href="menu.html" class="btn-primary">View Full Menu</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="logo-badge">
+        <img src="cafehub-logo.png" alt="Cafe Hub logo">
+      </span>
+      <p>Cold-pressed juices, thick shakes, falooda, kunafa and hearty bites — made fresh, served fast, right opposite Dine Time Restaurant.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html"><span class="chev">›</span> About Us</a></li>
+        <li><a href="contact.html"><span class="chev">›</span> Contact Us</a></li>
+        <li><a href="menu.html"><span class="chev">›</span> Menu</a></li>
+
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li><span class="ico">📍</span> 1/66, Veerapuram, Mahendra World City (Opp. Dine Time Restaurant)</li>
+        <li><span class="ico">📞</span> 9847187841, 7092047938</li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-hours">
+      <h4>Opening</h4>
+      <div class="hours-block">
+        <strong>Sunday – Saturday</strong>
+        <span>10:00 AM – 2:00 AM</span>
+      </div>
+      <span style="font-size:0.8rem; color:rgba(255,255,255,0.75);">Open every day, including public holidays.</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Cafe Hub. All rights reserved.</span>
+  </div>
+</footer>
+<script>
+  document.getElementById('burgerBtn').addEventListener('click', () => {
+    document.querySelector('nav.main-nav').classList.toggle('open');
+  });
+
+  const dishTabs = document.getElementById('dishTabs');
+  const dishGrid = document.getElementById('dishGrid');
+  if (dishTabs && dishGrid) {
+    dishTabs.addEventListener('click', (e) => {
+      const tab = e.target.closest('.menu-tab');
+      if (!tab) return;
+      dishTabs.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      dishGrid.querySelectorAll('.dish-card').forEach(card => {
+        const show = filter === 'all' || card.dataset.cat === filter;
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
+  }
+
+</script>
+</body></html>
