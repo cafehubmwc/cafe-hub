@@ -480,8 +480,27 @@
   </div>
 </footer>
 <script>
-  document.getElementById('burgerBtn').addEventListener('click', () => {
-    document.querySelector('nav.main-nav').classList.toggle('open');
+  const burgerBtn = document.getElementById('burgerBtn');
+const mainNav = document.querySelector('nav.main-nav');
+
+burgerBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  mainNav.classList.toggle('open');
+  burgerBtn.classList.toggle('open');
+});
+
+mainNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mainNav.classList.remove('open');
+    burgerBtn.classList.remove('open');
   });
+});
+
+document.addEventListener('click', (e) => {
+  if (!mainNav.contains(e.target) && !burgerBtn.contains(e.target)){
+    mainNav.classList.remove('open');
+    burgerBtn.classList.remove('open');
+  }
+});
 </script>
 </body></html>
