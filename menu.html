@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Hub — Food & Drinks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E1F22;
+    --paper:#ffffff;
+    --mist:#F7EFEA;
+    --cream:#D7B6A9;
+    --sage:#D7B6A9;
+    --blush:#F7EFEA;
+    --espresso:#2E1F22;
+    --red:#F95700;
+    --red-dark:#D94A00;
+    --lime:#62413E;
+    --line: rgba(46,31,34,0.14);
+    --muted: rgba(46,31,34,0.65);
+    --gold:#F95700;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5vw;
+    background:linear-gradient(135deg, #2E1F22 0%, #1F1517 100%);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--red);
+  }
+  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo-badge{ display:flex; align-items:center; line-height:1; }
+  .logo-badge img{ height:42px; width:auto; display:block; }
+
+  nav.main-nav ul{ display:flex; gap:36px; }
+  nav.main-nav a{
+    font-weight:700; font-size:0.95rem; letter-spacing:0.02em; color:#ffffff;
+    position:relative; padding:6px 0; transition:color .25s ease;
+  }
+  nav.main-nav a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0%; height:2px;
+    background:var(--cream); transition:width .3s ease;
+  }
+  nav.main-nav a:hover{ color:var(--cream); }
+  nav.main-nav a:hover::after{ width:100%; }
+  nav.main-nav a.active{ color:var(--red); }
+  nav.main-nav a.active::after{ width:100%; background:var(--red); }
+
+  .burger{ display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; }
+  .burger span{ width:26px; height:2px; background:#ffffff; border-radius:2px; }
+
+  /* ---------- MENU HERO ---------- */
+  .menu-hero{
+    position:relative;
+    overflow:hidden;
+    background:var(--red);
+    color:#ffffff;
+    padding:64px 5vw 74px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .menu-hero .dots{
+    position:absolute; inset:0; pointer-events:none;
+    background-image: radial-gradient(rgba(255,255,255,0.14) 1.6px, transparent 1.6px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(circle at 82% 40%, black, transparent 62%);
+            mask-image: radial-gradient(circle at 82% 40%, black, transparent 62%);
+  }
+  .menu-hero-inner{ position:relative; z-index:1; max-width:760px; margin:0 auto; }
+  .menu-hero .eyebrow{
+    display:inline-block;
+    font-weight:800; font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--cream);
+    margin-bottom:16px;
+  }
+  .menu-hero h1{
+    font-size:clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height:1.14;
+    color:#ffffff;
+  }
+  .menu-hero h1 .accent{ color:var(--ink); }
+  .menu-hero p{
+    margin-top:18px;
+    color:rgba(255,255,255,0.85);
+    line-height:1.75;
+    font-size:1.02rem;
+    max-width:520px;
+    margin-left:auto; margin-right:auto;
+  }
+  .hero-stats{
+    margin-top:34px;
+    display:flex; justify-content:center; gap:clamp(24px,5vw,56px); flex-wrap:wrap;
+  }
+  .hero-stats .stat strong{
+    display:block; font-family:'Baloo 2'; font-size:1.6rem; color:#ffffff;
+  }
+  .hero-stats .stat span{
+    display:block; margin-top:4px; font-size:0.78rem; color:rgba(255,255,255,0.75); letter-spacing:0.02em;
+  }
+
+  /* ---------- MENU TABS ---------- */
+  .menu-catalog{
+    max-width:1280px;
+    margin:0 auto;
+    padding:56px 5vw 100px;
+  }
+  .menu-tabs{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+    margin-bottom:46px;
+  }
+  .menu-tab{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--line);
+    background:var(--mist);
+    color:var(--ink);
+    font-weight:700; font-size:0.88rem;
+    padding:12px 20px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .menu-tab .ico{ font-size:1rem; }
+  .menu-tab:hover{ border-color:var(--red); color:var(--red-dark); }
+  .menu-tab.active{
+    background:var(--red); color:#fff; border-color:var(--red);
+    box-shadow:0 10px 22px rgba(249,87,0,0.25);
+  }
+
+  /* ---------- PRODUCT GRID ---------- */
+  .product-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:clamp(18px, 2.6vw, 30px);
+  }
+  .product-card{
+    position:relative;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .product-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 22px 44px rgba(46,31,34,0.14);
+  }
+  .product-media{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1;
+    overflow:hidden;
+    background:var(--mist);
+  }
+  .product-media img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .5s ease;
+  }
+  .product-card:hover .product-media img{ transform:scale(1.07); }
+
+  .product-badge{
+    position:absolute; top:14px; left:14px; z-index:2;
+    background:var(--red);
+    color:#fff;
+    font-weight:800; font-size:0.68rem; letter-spacing:0.03em;
+    padding:6px 12px;
+    border-radius:999px;
+    box-shadow:0 8px 16px rgba(249,87,0,0.35);
+  }
+
+  .product-overlay{
+    position:absolute; inset:0;
+    background:rgba(46,31,34,0.42);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transition:opacity .25s ease;
+    z-index:2;
+  }
+  .product-card:hover .product-overlay{ opacity:1; }
+  .order-now-btn{
+    background:var(--red);
+    color:#fff;
+    font-weight:800; font-size:0.85rem;
+    padding:12px 24px;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    transform:translateY(8px);
+    transition:transform .25s ease, background .2s ease;
+  }
+  .product-card:hover .order-now-btn{ transform:translateY(0); }
+  .order-now-btn:hover{ background:var(--red-dark); }
+
+  .product-body{
+    padding:20px 20px 22px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .product-cat{
+    font-size:0.72rem; font-weight:800; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .product-stars{
+    color:var(--gold);
+    font-size:0.82rem;
+    letter-spacing:2px;
+  }
+  .product-name{
+    font-family:'Baloo 2';
+    font-size:1.08rem;
+    color:var(--ink);
+    line-height:1.3;
+  }
+  .product-price-row{
+    margin-top:4px;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .product-price{
+    font-family:'Baloo 2'; font-weight:700; font-size:1.15rem; color:var(--red);
+  }
+  .product-price::before{ content:"₹"; opacity:0.65; margin-right:1px; }
+  .product-price-old{
+    font-size:0.85rem; color:var(--muted); text-decoration:line-through;
+  }
+  .product-price-old::before{ content:"₹"; opacity:0.6; }
+
+  /* ---------- PAGINATION ---------- */
+  .pagination{
+    margin-top:48px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  .page-btn{
+    width:42px; height:42px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .page-btn:hover{ border-color:var(--red); color:var(--red-dark); }
+  .page-btn.active{
+    background:var(--red); color:#fff; border-color:var(--red);
+  }
+  .page-btn[disabled]{ opacity:0.35; cursor:not-allowed; }
+  .page-btn[disabled]:hover{ border-color:var(--line); color:var(--ink); }
+
+  .empty-note{
+    text-align:center;
+    color:var(--muted);
+    padding:40px 0;
+  }
+
+  @media (max-width: 980px){
+    nav.main-nav{ display:none; }
+    .burger{ display:flex; }
+    .product-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 620px){
+    .product-grid{ grid-template-columns:1fr; }
+    .menu-tabs{ justify-content:flex-start; overflow-x:auto; flex-wrap:nowrap; padding-bottom:6px; }
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:linear-gradient(180deg, #2E1F22 0%, #1F1517 100%);
+    color:rgba(255,255,255,0.9);
+    padding:70px 5vw 0;
+    border-top:3px solid var(--red);
+  }
+  .footer-inner{
+    max-width:1280px; margin:0 auto;
+    display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap:40px;
+    padding-bottom:50px; border-bottom:1px solid rgba(215,182,169,0.25);
+  }
+  .footer-brand .logo-badge{ background:rgba(255,255,255,0.08); display:inline-flex; padding:10px 16px; border-radius:12px; }
+  .footer-brand .logo-badge img{ height:38px; }
+  .footer-brand p{ margin-top:18px; font-size:0.88rem; line-height:1.7; max-width:280px; color:rgba(255,255,255,0.85); }
+  .footer-socials{ display:flex; gap:10px; margin-top:22px; }
+  .footer-socials a{
+    width:38px; height:38px; border-radius:50%; border:1px solid rgba(215,182,169,0.4);
+    display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition:all .2s ease;
+  }
+  .footer-socials a:hover{ background:var(--red); border-color:var(--red); transform:translateY(-3px); }
+  footer h4{
+    font-family:'Baloo 2'; font-size:1.05rem; color:var(--cream); margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  footer h4::after{ content:""; height:2px; flex:1; background:rgba(215,182,169,0.3); }
+  .footer-col ul li{ margin-bottom:12px; }
+  .footer-col ul li a{
+    font-size:0.88rem; color:rgba(255,255,255,0.85); display:flex; align-items:center; gap:8px;
+    transition:color .2s ease, transform .2s ease;
+  }
+  .footer-col ul li a:hover{ color:var(--red); transform:translateX(3px); }
+  .footer-col ul li a .chev{ color:var(--red); font-weight:800; }
+  .footer-contact li{
+    margin-bottom:16px; display:flex; align-items:flex-start; gap:10px;
+    font-size:0.88rem; color:rgba(255,255,255,0.85); line-height:1.5;
+  }
+  .footer-contact li .ico{ color:var(--red); flex-shrink:0; margin-top:2px; }
+  .footer-hours .hours-block{ margin-bottom:16px; }
+  .footer-hours .hours-block strong{ display:block; color:var(--cream); font-size:0.9rem; margin-bottom:4px; }
+  .footer-hours .hours-block span{ font-size:0.86rem; color:rgba(255,255,255,0.85); }
+  .footer-bottom{
+    max-width:1280px; margin:0 auto; padding:22px 0 26px;
+    display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px;
+    font-size:0.8rem; color:rgba(255,255,255,0.75);
+  }
+  .footer-bottom a{ color:var(--cream); }
+  .footer-bottom a:hover{ color:var(--red); }
+  @media (max-width: 980px){ .footer-inner{ grid-template-columns:1fr 1fr; } }
+  @media (max-width: 560px){ .footer-inner{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <span class="logo-badge">
+      <img src="cafehub-logo.png" alt="Cafe Hub logo">
+    </span>
+  </a>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="menu.html" class="active">Menu</a></li>
+      <li><a href="testimonial.html">Testimonial</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <button class="burger" aria-label="menu" id="burgerBtn"><span></span><span></span><span></span></button>
+</header>
+
+<!-- ===================== MENU HERO ===================== -->
+<section class="menu-hero">
+  <div class="dots"></div>
+  <div class="menu-hero-inner">
+    <span class="eyebrow">Our Food Menu</span>
+    <h1>Taste the best <span class="accent">of Cafe Hub</span></h1>
+    <p>Cold-pressed juices, thick shakes, falooda, kunafa and hearty bites — made fresh, served fast, right opposite Dine Time Restaurant.</p>
+    <div class="hero-stats">
+      <div class="stat"><strong>200+</strong><span>Menu Items</span></div>
+      <div class="stat"><strong>5</strong><span>Categories</span></div>
+      <div class="stat"><strong>16 hrs</strong><span>Open Daily</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRODUCT CATALOG ===================== -->
+<section class="menu-catalog" id="menu">
+  <div class="menu-tabs" id="menuTabs"></div>
+  <div class="product-grid" id="productGrid"></div>
+  <div class="pagination" id="pagination"></div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <span class="logo-badge">
+        <img src="cafehub-logo.png" alt="Cafe Hub logo">
+      </span>
+      <p>Cold-pressed juices, thick shakes, falooda, kunafa and hearty bites — made fresh, served fast, right opposite Dine Time Restaurant.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html"><span class="chev">›</span> About Us</a></li>
+        <li><a href="contact.html"><span class="chev">›</span> Contact Us</a></li>
+        <li><a href="menu.html"><span class="chev">›</span> Menu</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li><span class="ico">📍</span> 1/66, Veerapuram, Mahendra World City (Opp. Dine Time Restaurant)</li>
+        <li><span class="ico">📞</span> 9847187841, 7092047938</li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-hours">
+      <h4>Opening</h4>
+      <div class="hours-block">
+        <strong>Sunday – Saturday</strong>
+        <span>10:00 AM – 2:00 AM</span>
+      </div>
+      <span style="font-size:0.8rem; color:rgba(255,255,255,0.75);">Open every day, including public holidays.</span>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Cafe Hub. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  const menuData = [
+    {
+      tab: "Juices & Coolers",
+      icon: "🥤",
+      groups: [
+        { name:"Fresh Juice", items:[["Carrot",60],["Watermelon",50],["Pineapple",60],["Grapes",60],["Muskmelon",50],["Sweet Lime",50],["Orange",60],["Amla",60],["Pappaya",60],["Mango",60],["Fig",60],["Apple",60],["Pomegranate",60],["Dragon Fruit",70]] },
+        { name:"Refresh Juice", items:[["Grape Lime",35],["Lime Juice",25],["Jal Jeera Lime",35],["Mint Lime",35],["Ginger Lime",35]] },
+        { name:"Pure Juice", items:[["Carrot",80],["Sweet Lime",70],["Pineapple",70],["Pomegranate",80],["Grapes",70],["Orange",70],["Watermelon",60]] },
+        { name:"Healthy", items:[["Cucumber",60],["ABC",80],["Vegetable Juice",60]] },
+        { name:"Mojitos", items:[["Blue Curacao",80],["Kiwi",80],["Watermelon",80],["Orange",80],["Mango",80],["Lichi",80],["Strawberry",80]] },
+        { name:"Lemon Soda", items:[["Sweet Soda",30],["Salt Soda",30],["Chili Soda",40],["Pineapple Spicy Soda",50],["Ginger Soda",40],["Strawberry Soda",50],["Mango Soda",50],["Orange Soda",50],["Jal Jeera Soda",40],["Grape Lemon Soda",40],["Pineapple Lemon Soda",40],["Lemon Soda Sweet & Salt",35]] }
+      ]
+    },
+    {
+      tab: "Shakes, Falooda & Lassi",
+      icon: "🍨",
+      groups: [
+        { name:"Special Milk Shake", items:[["Honey Fig",80],["Honey Apple",80],["Honey Avocado",80],["Cashew Nuts Fig",80],["Choco Apple",80],["Choco Chikku",80],["Dry Fruit Milk Shake",110],["Honey Dry Nuts",120],["Cold Coffee",80],["Cold Boost",80],["Cold Horlicks",80],["Kit Kat Milk Shake",80],["Oreo Milk Shake",80],["Tender Coconut",80]] },
+        { name:"Fruits Milk Shake", items:[["Pomegranate Milk Shake",60],["Apple Milk Shake",60],["Fig Milk Shake",60],["Banana Milk Shake",60],["Muskmelon Milk Shake",60],["Papaya Milk Shake",60],["Kiwi Milk Shake",60],["Carrot Milk Shake",60],["Dragon Fruit Milk Shake",80],["Avocado Milk Shake",80],["Strawberry Milk Shake",80],["Chikku Milk Shake",60],["Mango Milk Shake",60]] },
+        { name:"Ice Cream Milk Shake", items:[["Vanilla Milk Shake",80],["Pista Milk Shake",90],["Strawberry Milk Shake",80],["Butter Scotch",90],["Blackcurrant Milk Shake",90],["Chocolate Milk Shake",90]] },
+        { name:"Falooda", items:[["Mini Falooda",90],["Royal Falooda",120],["Special Falooda",150],["Dry Fruits Falooda",160],["Tender Falooda",140],["Triple Sundae",130],["Italian Delight (Small)",90],["Italian Delight (Large)",150],["Choco Delight",90],["Strawberry Falooda",130],["Pista Falooda",130],["Chocolate Falooda",130],["Vanilla Falooda",130],["Mango Falooda",130],["Blackcurrant Falooda",130],["Butter Scotch",130]] },
+        { name:"Ice Cream (2 Scoop)", items:[["Vanilla",70],["Strawberry",70],["Pista",70],["Butter Scotch",70],["Chocolate",70],["Blackcurrant",70]] },
+        { name:"Lassi", items:[["Sweet Lassi",50],["Mango Lassi",60],["Orange Lassi",60],["Banana Lassi",60]] },
+        { name:"Avil Milk", items:[["Normal Avil Milk",60],["Avil Milk",70],["Special Avil Milk",90],["Avil Milk Dry Fruits",100],["Cut Fruits Avil Milk",70],["Chocolate Avil Milk",90],["Dry Fruits Avil Milk",90],["Strawberry Avil Milk",90],["Pista Avil Milk",90]] },
+        { name:"Cafe Hub Special", items:[["Rose Milk",45],["Rose Milk with Ice Cream",60],["Mixed Fruit Juice",70],["Putt Ice Cream",200],["Sharjah Shake",80],["Brownie",190]] }
+      ]
+    },
+    {
+      tab: "Hot Drinks & Kunafa",
+      icon: "☕",
+      groups: [
+        { name:"Hot Drinks", items:[["Tea",20],["Coffee",25],["Boost",25],["Horlicks",25],["Milk",20],["Black Tea",20],["Lemon Tea",20],["Badam Milk",20],["Chukku Milk",20]] },
+        { name:"Kunafa", items:[["Cashew Kunafa",340],["Classic Cream Kunafa",310],["Cream Cheese Kunafa",310],["Mozzarella Cheese Kunafa",320],["Nutella Kunafa",330],["Pistachio Kunafa",360]] }
+      ]
+    },
+    {
+      tab: "Snacks & Sides",
+      icon: "🍟",
+      groups: [
+        { name:"Fried Items", items:[["French Fries",80],["Peri Peri French Fries",90],["Veg Nuggets",70],["Chicken Nuggets",90],["Chicken Momos",100],["Veg Momos",80],["Smile",70]] },
+        { name:"Omlette", items:[["Bread Omlette",45],["Cheese Bread Omlette",60],["Special Bread Omlette",70],["Chicken Bread Omlette",80],["Mushroom Bread Omlette",70],["Paneer Bread Omlette",70],["Double Omlette",40],["Single Omlette",20],["Mushroom Omlette",50],["Paneer Omlette",50],["Half Boil / Full Boil",20]] },
+        { name:"Maggie (Non-Veg)", items:[["Chicken Maggie",70],["Egg Maggie",60]] },
+        { name:"Maggie (Veg)", items:[["Veg Maggie",50],["Paneer Maggie",70],["Mushroom Maggie",60],["Sweetcorn Maggie",60],["Plain Maggie",40]] },
+        { name:"Chapathi Roll (Non-Veg)", items:[["Chicken Roll",70],["Egg Roll",60]] },
+        { name:"Chapathi Roll (Veg)", items:[["Veg Roll",60],["Paneer Roll",60],["Mushroom Roll",60],["Sweetcorn Roll",60]] },
+        { name:"Paratha Roll (Non-Veg)", items:[["Chicken Roll",80],["Egg Roll",80]] },
+        { name:"Paratha Roll (Veg)", items:[["Vegetable Roll",70],["Mushroom Roll",70],["Paneer Roll",70],["Sweetcorn Roll",70]] }
+      ]
+    },
+    {
+      tab: "Mains & Burgers",
+      icon: "🍔",
+      groups: [
+        { name:"Sandwich (Non-Veg)", items:[["Chicken Sandwich",90],["Egg Mayo Sandwich",60],["Egg Omelet Sandwich",60],["Egg Podimass Sandwich",60]] },
+        { name:"Sandwich (Veg)", items:[["Veg Sandwich",60],["Paneer Sandwich",80],["Mushroom Sandwich",70],["Baby Corn Sandwich",70],["Sweetcorn Sandwich",70],["Butter Grill Sandwich",40],["Chilli Cheese Sandwich",45],["Capsicum Cheese Sandwich",45]] },
+        { name:"Burgers", items:[["Chicken Burger",90],["Egg Burger",80],["Veg Burger",80],["Zinger Burger",100]] },
+        { name:"Fried Chicken", items:[["Fried Chicken (8 Pcs)",450],["Fried Chicken (4 Pcs)",250],["Fried Chicken (2 Pcs)",150],["Chicken Wings (6 Pcs)",200],["Leg Fry (2 Pcs)",180],["Chicken Strips (6 Pcs)",250]] },
+        { name:"Pasta", items:[["Masala Pasta",80],["Mushroom Pasta",80],["Paneer Pasta",80],["Cheese Pasta",80],["Chicken Pasta",90]] },
+        { name:"Special", items:[["Chicken Pizza",190],["Perri Peri Chicken Pizza",190],["Corn and Mushroom Pizza",180],["Paneer Pizza",180],["Classic Cheese Margherita",170],["Gobi 65 (Plate)",100]] }
+      ]
+    }
+  ];
+
+  const BADGES = ["Bestseller","Chef's Pick","Popular","Fresh Pick","Customer Favourite","Must Try"];
+  const PER_PAGE = 6;
+
+  let currentTab = 0;
+  let currentPage = 1;
+
+  const tabsEl = document.getElementById('menuTabs');
+  const gridEl = document.getElementById('productGrid');
+  const pagerEl = document.getElementById('pagination');
+
+  const ITEM_IMAGES = {
+    "Fresh Juice::Carrot": "https://images.unsplash.com/photo-1528556860752-2a6a19a285a3?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Watermelon": "https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Pineapple": "https://images.unsplash.com/photo-1541085681957-a433bdafd5b9?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Grapes": "https://images.unsplash.com/photo-1530816878870-4f4fe65f5946?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Muskmelon": "muskmelon juice.png.jpg",
+    "Fresh Juice::Sweet Lime": "https://images.unsplash.com/photo-1624487394217-6d192d003564?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Orange": "orange juice.png.jpg",
+    "Fresh Juice::Amla": "amla juice.png.jpg",
+    "Fresh Juice::Pappaya": "papaya juice.png.jpg",
+    "Fresh Juice::Mango": "Mango juice.png.jpg",
+    "Fresh Juice::Fig": "fig juice.png.jpg",
+    "Fresh Juice::Apple": "apple juice.png.jpg",
+    "Fresh Juice::Pomegranate": "https://images.unsplash.com/photo-1602860637860-fa3d04533a07?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fresh Juice::Dragon Fruit": "dragon fruit juice.png.jpg",
+    "Refresh Juice::Grape Lime": "https://images.unsplash.com/photo-1607547023948-57254fde4f0b?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Refresh Juice::Lime Juice": "https://images.unsplash.com/photo-1583571560258-6377d316dac9?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Refresh Juice::Mint Lime": "https://images.unsplash.com/photo-1555949366-819808d99159?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Refresh Juice::Ginger Lime": "https://images.unsplash.com/photo-1610450622827-195cb7308af8?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Carrot": "https://images.unsplash.com/photo-1528556860752-2a6a19a285a3?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Sweet Lime": "https://images.unsplash.com/photo-1624487394217-6d192d003564?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Pineapple": "https://images.unsplash.com/photo-1541085681957-a433bdafd5b9?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Pomegranate": "https://images.unsplash.com/photo-1602860637860-fa3d04533a07?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Grapes": "https://images.unsplash.com/photo-1530816878870-4f4fe65f5946?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Orange": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pure Juice::Watermelon": "https://images.unsplash.com/photo-1683166263544-e754e85c3e7c?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Healthy::Cucumber": "https://images.unsplash.com/photo-1577595181945-e018c02f7896?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Healthy::ABC": "https://images.unsplash.com/photo-1500291161618-747dee2ab16c?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Healthy::Vegetable Juice": "https://images.unsplash.com/photo-1610622929746-ab2606cfd2b7?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Mojitos::Blue Curacao": "https://images.unsplash.com/photo-1551782450-3939704166fc?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Mojitos::Kiwi": "kiwi mojito.png.jpg",
+    "Mojitos::Watermelon": "watermelon mojito.png.jpg",
+    "Mojitos::Orange": "orange mojito.png.jpg",
+    "Mojitos::Mango": "mango mojito.png.jpg",
+    "Mojitos::Lichi": "lichi mojito.png.jpg",
+    "Mojitos::Strawberry": "strawberry mojito.png.jpg",
+    "Lemon Soda::Sweet Soda": "sweet soda.png.jpg",
+    "Lemon Soda::Salt Soda": "salt soda.png.jpg",
+    "Lemon Soda::Chili Soda": "chilli soda.png.jpg",
+    "Lemon Soda::Pineapple Spicy Soda": "pineapple spicy soda.png.jpg",
+    "Lemon Soda::Ginger Soda": "ginger soda.png.jpg",
+    "Lemon Soda::Strawberry Soda": "strawberry soda.png.jpg",
+    "Lemon Soda::Mango Soda": "mango soda.jpg",
+    "Lemon Soda::Orange Soda": "orange soda.jpg",
+    "Lemon Soda::Jal Jeera Soda": "jaljeera soda.jpg",
+    "Lemon Soda::Grape Lemon Soda": "grape soda.jpg",
+    "Lemon Soda::Pineapple Lemon Soda": "pineapple lemon soda.png.jpg",
+    "Lemon Soda::Lemon Soda Sweet & Salt": "lemon soda sweet & salt.png.jpg",
+
+    "Special Milk Shake::Honey Fig": "honey fig milkshake.jpg",
+    "Special Milk Shake::Honey Apple": "honey apple milkshake.jpg",
+    "Special Milk Shake::Honey Avocado": "honey avacodo milkshake.jpg",
+    "Special Milk Shake::Cashew Nuts Fig": "cashew nuts fig milkshake.jpg",
+    "Special Milk Shake::Choco Apple": "choco apple milkshake.jpg", 
+    "Special Milk Shake::Choco Chikku": "choco chikku milkshake.jpg",
+    "Special Milk Shake::Dry Fruit Milk Shake": "dry fruit milkshake.jpg",
+    "Special Milk Shake::Honey Dry Nuts": "honey dry fruits milk shake.jpg", 
+    "Special Milk Shake::Cold Coffee": "cold coffe milkshake.jpg",
+    "Special Milk Shake::Cold Boost": "cold boost milkshake.jpg",
+    "Special Milk Shake::Cold Horlicks": "cold horlicks milkshake.jpg",
+    "Special Milk Shake::Kit Kat Milk Shake": "kit kat milkshake.jpg",
+    "Special Milk Shake::Oreo Milk Shake": "oreo milkshake.jpg",
+    "Special Milk Shake::Tender Coconut": "Tender cocnut milk shake.jpg",
+
+    "Fruits Milk Shake::Pomegranate Milk Shake": "pomegranate milkshake.jpg",
+    "Fruits Milk Shake::Apple Milk Shake": "apple milkshake.jpg",
+    "Fruits Milk Shake::Fig Milk Shake": "fig milkshake.jpg",
+    "Fruits Milk Shake::Banana Milk Shake": "bananna milk shake.jpg",
+    "Fruits Milk Shake::Muskmelon Milk Shake": "muskmelon milkshake.jpg",
+    "Fruits Milk Shake::Papaya Milk Shake": "papapya milk shake.jpg",
+    "Fruits Milk Shake::Kiwi Milk Shake": "kiwi milkshake.jpg",
+    "Fruits Milk Shake::Carrot Milk Shake": "carrot milkshake.jpg",
+    "Fruits Milk Shake::Dragon Fruit Milk Shake": "dragon fruit milkshake.jpg",
+    "Fruits Milk Shake::Avocado Milk Shake": "avacado milkshake.jpg",
+    "Fruits Milk Shake::Strawberry Milk Shake": "strawberry milkshake.jpg",
+    "Fruits Milk Shake::Chikku Milk Shake": "chikku milkshake.jpg",
+    "Fruits Milk Shake::Mango Milk Shake": "mango milkshake.jpg",
+
+    "Ice Cream Milk Shake::Vanilla Milk Shake": "vanilla icecream.jpg",
+    "Ice Cream Milk Shake::Pista Milk Shake": "pista  milkshake.jpg",
+    "Ice Cream Milk Shake::Strawberry Milk Shake": "straw berry milkshake.jpg",
+    "Ice Cream Milk Shake::Butter Scotch": "butterscotch milkshake.jpg",
+    "Ice Cream Milk Shake::Blackcurrant Milk Shake": "black current milkshake.jpg",
+    "Ice Cream Milk Shake::Chocolate Milk Shake": "chocolate milkshake.jpg",
+
+    "Falooda::Mini Falooda": "mini falooda.jpg",
+    "Falooda::Royal Falooda": "royal falooda.jpg",
+    "Falooda::Special Falooda": "special falooda.jpg",
+    "Falooda::Dry Fruits Falooda": "dry fruits falooda.jpg",
+    "Falooda::Tender Falooda": "tender falooda.jpg",
+    "Falooda::Triple Sundae": "tripls sunade falooda.jpg",
+    "Falooda::Italian Delight (Small)": "italian delight small.jpg",
+    "Falooda::Italian Delight (Large)": "italian delight large.jpg",
+    "Falooda::Choco Delight": "choco delight.jpg",
+    "Falooda::Strawberry Falooda": "strawberry falooda.jpg",
+    "Falooda::Pista Falooda": "pista falooda.jpg",
+    "Falooda::Chocolate Falooda": "chocolate falooda.jpg",
+    "Falooda::Vanilla Falooda": "https://images.unsplash.com/photo-1557142046-c704a3adf364?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Falooda::Mango Falooda": "Mango Falooda.jpg",
+    "Falooda::Blackcurrant Falooda": "https://images.unsplash.com/photo-1516559828984-fb3b99548b21?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Falooda::Butter Scotch": "https://images.unsplash.com/photo-1553741755-53af778aef6a?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Ice Cream (2 Scoop)::Vanilla": "vanilla ice cream.jpg",
+    "Ice Cream (2 Scoop)::Strawberry": "strawberry ice cream.jpg",
+    "Ice Cream (2 Scoop)::Pista": "pista ice cream.jpg",
+    "Ice Cream (2 Scoop)::Butter Scotch": "butter scotch ice cream.jpg",
+    "Ice Cream (2 Scoop)::Chocolate": "https://images.unsplash.com/photo-1653085315536-1379bc836161?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Ice Cream (2 Scoop)::Blackcurrant": "https://images.unsplash.com/photo-1516559828984-fb3b99548b21?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Lassi::Sweet Lassi": "https://images.unsplash.com/photo-1553787499-6f9133860278?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Lassi::Mango Lassi": "https://images.unsplash.com/photo-1716956755600-4d32af2b8f87?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Lassi::Orange Lassi": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Lassi::Banana Lassi": "https://images.unsplash.com/photo-1685967836529-b0e8d6938227?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Avil Milk::Normal Avil Milk": "https://images.unsplash.com/photo-1550583724-b2692b85b150?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Avil Milk::Avil Milk": "avil milk.jpg",
+    "Avil Milk::Special Avil Milk": "special avil milk.jpg",
+    "Avil Milk::Avil Milk Dry Fruits": "https://images.unsplash.com/photo-1553787499-6f9133860278?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Avil Milk::Cut Fruits Avil Milk": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Avil Milk::Chocolate Avil Milk": "https://images.unsplash.com/photo-1653085315536-1379bc836161?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Avil Milk::Dry Fruits Avil Milk": "dry fruits avil milk.jpg",
+    "Avil Milk::Strawberry Avil Milk": "https://images.unsplash.com/photo-1614707585284-9cb9fc018387?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Avil Milk::Pista Avil Milk": "https://images.unsplash.com/photo-1554630981-a73ffb5ed6f8?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Cafe Hub Special::Rose Milk": "ros emilk.jpg",
+    "Cafe Hub Special::Rose Milk with Ice Cream": "rose milk with ice cream.jpg",
+    "Cafe Hub Special::Mixed Fruit Juice": "mixed fruit juice.jpg",
+    "Cafe Hub Special::Putt Ice Cream": "putt ice cream.jpg",
+    "Cafe Hub Special::Sharjah Shake": "sharjah shake.jpg",
+    "Cafe Hub Special::Brownie": "sizzler brownie.jpg",
+    "Hot Drinks::Tea": "tea.jpg",
+    "Hot Drinks::Coffee": "coffee.jpg",
+    "Hot Drinks::Boost": "boost.jpg",
+    "Hot Drinks::Horlicks": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Hot Drinks::Milk": "https://images.unsplash.com/photo-1550583724-b2692b85b150?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Hot Drinks::Black Tea": "black tea.jpg",
+    "Hot Drinks::Lemon Tea": "lemon tea.jpg",
+    "Hot Drinks::Badam Milk": "Badam milk.jpg",
+    "Hot Drinks::Chukku Milk": "Chukku milk.jpg",
+
+    "Kunafa::Cashew Kunafa": "cashew kunafa.jpg",
+    "Kunafa::Classic Cream Kunafa": "classic cream kunafa.jpg",
+    "Kunafa::Cream Cheese Kunafa": "cream cheese kunafa.jpg",
+    "Kunafa::Mozzarella Cheese Kunafa": "mozzarella cheese kunafa.jpg",
+    "Kunafa::Nutella Kunafa": "nutella kunafa.jpg",
+    "Kunafa::Pistachio Kunafa": "pistachio kunafa.jpg",
+
+    "Fried Items::French Fries": "https://images.unsplash.com/photo-1606755456206-b25206cde27e?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Items::Peri Peri French Fries": "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Items::Veg Nuggets": "https://images.unsplash.com/photo-1562967914-608f82629710?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Items::Chicken Nuggets": "chicken nuggets.jpg",
+    "Fried Items::Chicken Momos": "https://images.unsplash.com/photo-1694923450868-b432a8ee52aa?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Items::Veg Momos": "veg momos.jpg",
+    "Fried Items::Smile": "https://images.unsplash.com/photo-1639024471283-03518883512d?fm=jpg&q=60&w=800&auto=format&fit=crop",
+
+    "Omlette::Bread Omlette": "https://images.unsplash.com/photo-1665206231479-6bff0bdcd51d?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Omlette::Cheese Bread Omlette": "chese braed omlete.jpg",
+    "Omlette::Special Bread Omlette": "https://images.unsplash.com/photo-1600555379765-f7761ee54a5b?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Omlette::Chicken Bread Omlette": "chicken bread omlete.jpg",
+    "Omlette::Mushroom Bread Omlette": "mushroom bread omlete.jpg",
+    "Omlette::Paneer Bread Omlette": "paneer braed omlete.jpg", 
+    "Omlette::Double Omlette": "double omlete.jpg",
+    "Omlette::Single Omlette": "single omlete.jpg",
+    "Omlette::Mushroom Omlette": "mushroom omlete.jpg",
+    "Omlette::Paneer Omlette": "panner omlete.jpg",
+    "Omlette::Half Boil / Full Boil": "https://images.unsplash.com/photo-1557965983-5b9fc9ab9014?fm=jpg&q=60&w=800&auto=format&fit=crop",
+
+    "Maggie (Non-Veg)::Chicken Maggie": "chicken maggie.jpg",
+    "Maggie (Non-Veg)::Egg Maggie": "https://images.unsplash.com/photo-1612200647508-6cb3d5c3f533?fm=jpg&q=60&w=800&auto=format&fit=crop",
+
+    "Maggie (Veg)::Veg Maggie": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Maggie (Veg)::Paneer Maggie": "panner maggie.jpg",
+    "Maggie (Veg)::Mushroom Maggie": "mushroom maggie.jpg",
+    "Maggie (Veg)::Sweetcorn Maggie": "sweet corn maggie.jpg",
+    "Maggie (Veg)::Plain Maggie": "plain maggie.jpg",
+
+    "Chapathi Roll (Non-Veg)::Chicken Roll": "chicken chapthi roll.jpg",
+    "Chapathi Roll (Non-Veg)::Egg Roll": "egg chapthi roll.jpg",
+
+    "Chapathi Roll (Veg)::Veg Roll": "veg chapathi roll.jpg",
+    "Chapathi Roll (Veg)::Paneer Roll": "paneer chapathi roll.jpg",
+    "Chapathi Roll (Veg)::Mushroom Roll": "mushroom chapathi roll.jpg",
+    "Chapathi Roll (Veg)::Sweetcorn Roll": "sweet corn chapathi roll.jpg",
+
+    "Paratha Roll (Non-Veg)::Chicken Roll": "chicken roll.jpg",
+    "Paratha Roll (Non-Veg)::Egg Roll": "egg roll.jpg",
+
+    "Paratha Roll (Veg)::Vegetable Roll": "veg roll.jpg",
+    "Paratha Roll (Veg)::Mushroom Roll": "mushroom roll.jpg",
+    "Paratha Roll (Veg)::Paneer Roll": "paneer roll.jpg",
+    "Paratha Roll (Veg)::Sweetcorn Roll": "sweet corn roll.jpg",
+    "Sandwich (Non-Veg)::Chicken Sandwich": "https://images.unsplash.com/photo-1540713434306-58505cf1b6fc?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Non-Veg)::Egg Mayo Sandwich": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Non-Veg)::Egg Omelet Sandwich": "https://images.unsplash.com/photo-1553909489-cd47e0907980?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Non-Veg)::Egg Podimass Sandwich": "https://images.unsplash.com/photo-1595436252086-7496fb8c41e9?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Sandwich (Veg)::Veg Sandwich": "https://images.unsplash.com/photo-1481070414801-51fd732d7184?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Paneer Sandwich": "https://images.unsplash.com/photo-1528736235302-52922df5c122?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Mushroom Sandwich": "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Baby Corn Sandwich": "https://images.unsplash.com/photo-1481070414801-51fd732d7184?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Sweetcorn Sandwich": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Butter Grill Sandwich": "https://images.unsplash.com/photo-1509722747041-616f39b57569?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Chilli Cheese Sandwich": "https://images.unsplash.com/photo-1737513916865-63c7fd3b67a7?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Sandwich (Veg)::Capsicum Cheese Sandwich": "https://images.unsplash.com/photo-1481070414801-51fd732d7184?fm=jpg&q=60&w=800&auto=format&fit=crop",
+ 
+    "Burgers::Chicken Burger": "https://images.unsplash.com/photo-1603508102983-99b101395d1a?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Burgers::Egg Burger": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Burgers::Veg Burger": "https://images.unsplash.com/photo-1520072959219-c595dc870360?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Burgers::Zinger Burger": "https://images.unsplash.com/photo-1626078436450-7873f3d31e4f?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Fried Chicken (8 Pcs)": "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Fried Chicken (4 Pcs)": "https://images.unsplash.com/photo-1657271511865-f610b280dca4?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Fried Chicken (2 Pcs)": "https://images.unsplash.com/photo-1626082927389-6cd097cee6a6?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Chicken Wings (6 Pcs)": "https://images.unsplash.com/photo-1608039755401-742074f0548d?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Leg Fry (2 Pcs)": "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Fried Chicken::Chicken Strips (6 Pcs)": "https://images.unsplash.com/photo-1608039755401-742074f0548d?fm=jpg&q=60&w=800&auto=format&fit=crop",
+     "Pasta::Masala Pasta": "https://images.unsplash.com/photo-1573821201069-dbf297ca410a?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pasta::Mushroom Pasta": "https://images.unsplash.com/photo-1550431221-6f1495d56cf3?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pasta::Paneer Pasta": "paneer pasta.jpg",
+    "Pasta::Cheese Pasta": "https://images.unsplash.com/photo-1649263746184-1caa94023fe9?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Pasta::Chicken Pasta": "https://images.unsplash.com/photo-1749384156571-93b5c1b9ff92?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Special::Chicken Pizza": "https://images.unsplash.com/photo-1767065603441-61923212f80c?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Special::Perri Peri Chicken Pizza": "chken pizaa.jpg",
+    "Special::Corn and Mushroom Pizza": "mushroom pizza.jpg",
+    "Special::Paneer Pizza": "paneer pizza.jpg",
+    "Special::Classic Cheese Margherita": "https://images.unsplash.com/photo-1664309641932-0e03e0771b97?fm=jpg&q=60&w=800&auto=format&fit=crop",
+    "Special::Gobi 65 (Plate)": "gobi 65.jpg"
+  };
+
+  const GROUP_FALLBACK_IMG = {
+    "Fresh Juice":"https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&q=75&auto=format&fit=crop",
+    "Refresh Juice":"https://images.unsplash.com/photo-1523371054106-bbf80586c38c?w=600&q=75&auto=format&fit=crop",
+    "Pure Juice":"https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=600&q=75&auto=format&fit=crop",
+    "Healthy":"https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&q=75&auto=format&fit=crop",
+    "Mojitos":"https://images.unsplash.com/photo-1609345265499-2133bbeb6ce5?w=600&q=75&auto=format&fit=crop",
+    "Lemon Soda":"https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=75&auto=format&fit=crop",
+    "Special Milk Shake":"https://images.unsplash.com/photo-1553787499-6f9133860278?w=600&q=75&auto=format&fit=crop",
+    "Fruits Milk Shake":"https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=75&auto=format&fit=crop",
+    "Ice Cream Milk Shake":"https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=600&q=75&auto=format&fit=crop",
+    "Falooda":"https://images.unsplash.com/photo-1630823184409-1c6014968038?w=600&q=75&auto=format&fit=crop",
+    "Ice Cream (2 Scoop)":"https://images.unsplash.com/photo-1580915411954-282cb1b0d780?w=600&q=75&auto=format&fit=crop",
+    "Lassi":"https://images.unsplash.com/photo-1692620609860-be6717812f71?w=600&q=75&auto=format&fit=crop",
+    "Avil Milk":"https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=600&q=75&auto=format&fit=crop",
+    "Cafe Hub Special":"https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&q=75&auto=format&fit=crop",
+    "Hot Drinks":"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=75&auto=format&fit=crop",
+    "Kunafa":"https://images.unsplash.com/photo-1665508363889-4cbf75a30ec9?w=600&q=75&auto=format&fit=crop",
+    "Fried Items":"https://images.unsplash.com/photo-1585109649139-366815a0d713?w=600&q=75&auto=format&fit=crop",
+    "Omlette":"https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&q=75&auto=format&fit=crop",
+    "Maggie (Non-Veg)":"https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&q=75&auto=format&fit=crop",
+    "Maggie (Veg)":"https://images.unsplash.com/photo-1692273212247-f5efb3fc9b87?w=600&q=75&auto=format&fit=crop",
+    "Chapathi Roll (Non-Veg)":"https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600&q=75&auto=format&fit=crop",
+    "Chapathi Roll (Veg)":"https://images.unsplash.com/photo-1662192512691-2786c53eca40?w=600&q=75&auto=format&fit=crop",
+    "Paratha Roll (Non-Veg)":"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=600&q=75&auto=format&fit=crop",
+    "Paratha Roll (Veg)":"https://images.unsplash.com/photo-1662192513478-78dc0f17e4a0?w=600&q=75&auto=format&fit=crop",
+    "Sandwich (Non-Veg)":"https://images.unsplash.com/photo-1567234669003-dce7a7a88821?w=600&q=75&auto=format&fit=crop",
+    "Sandwich (Veg)":"https://images.unsplash.com/photo-1481070414801-51fd732d7184?w=600&q=75&auto=format&fit=crop",
+    "Burgers":"https://images.unsplash.com/photo-1603508102983-99b101395d1a?w=600&q=75&auto=format&fit=crop",
+    "Fried Chicken":"https://images.unsplash.com/photo-1657271511865-f610b280dca4?w=600&q=75&auto=format&fit=crop",
+    "Pasta":"https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&q=75&auto=format&fit=crop",
+    "Special":"https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=600&q=75&auto=format&fit=crop"
+  };
+
+  const GENERIC_FALLBACK = "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=75&auto=format&fit=crop";
+
+  function itemImageUrl(itemName, groupName){
+    const key = groupName + "::" + itemName;
+    if (ITEM_IMAGES[key]) return ITEM_IMAGES[key];
+    return GROUP_FALLBACK_IMG[groupName] || GENERIC_FALLBACK;
+  }
+
+  function flattenTab(tabIndex){
+    const cat = menuData[tabIndex];
+    const items = [];
+    cat.groups.forEach(group => {
+      group.items.forEach(([name, price]) => {
+        items.push({
+          name,
+          price,
+          sub: group.name,
+          img: itemImageUrl(name, group.name),
+          fallback: GROUP_FALLBACK_IMG[group.name] || GENERIC_FALLBACK
+        });
+      });
+    });
+    return items;
+  }
+
+  function renderTabs(){
+    menuData.forEach((cat, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'menu-tab' + (i === 0 ? ' active' : '');
+      btn.innerHTML = `<span class="ico">${cat.icon}</span> ${cat.tab}`;
+      btn.addEventListener('click', () => {
+        currentTab = i;
+        currentPage = 1;
+        document.querySelectorAll('.menu-tab').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        renderGrid();
+      });
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function renderGrid(){
+    const items = flattenTab(currentTab);
+    const totalPages = Math.max(1, Math.ceil(items.length / PER_PAGE));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * PER_PAGE;
+    const pageItems = items.slice(start, start + PER_PAGE);
+
+    gridEl.innerHTML = '';
+    if (pageItems.length === 0){
+      gridEl.innerHTML = '<p class="empty-note">No items in this category yet.</p>';
+    }
+
+    pageItems.forEach((item, i) => {
+      const badge = BADGES[(start + i) % BADGES.length];
+      const oldPrice = Math.round((item.price * 1.15) / 5) * 5;
+
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <div class="product-media">
+          <span class="product-badge">${badge}</span>
+          <img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.onerror=null;this.src='${item.fallback}';">
+        </div>
+        <div class="product-body">
+          <span class="product-cat">${item.sub}</span>
+          <span class="product-stars">★★★★★</span>
+          <h3 class="product-name">${item.name}</h3>
+          <div class="product-price-row">
+            <span class="product-price">${item.price}</span>
+            <span class="product-price-old">${oldPrice}</span>
+          </div>
+        </div>
+      `;
+      gridEl.appendChild(card);
+    });
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages){
+    pagerEl.innerHTML = '';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.innerHTML = '←';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => { currentPage--; renderGrid(); scrollToCatalog(); });
+    pagerEl.appendChild(prevBtn);
+
+    for (let p = 1; p <= totalPages; p++){
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
+      btn.textContent = p;
+      btn.addEventListener('click', () => { currentPage = p; renderGrid(); scrollToCatalog(); });
+      pagerEl.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.innerHTML = '→';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => { currentPage++; renderGrid(); scrollToCatalog(); });
+    pagerEl.appendChild(nextBtn);
+  }
+
+  function scrollToCatalog(){
+    document.getElementById('menu').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  renderTabs();
+  renderGrid();
+
+  document.getElementById('burgerBtn').addEventListener('click', () => {
+    document.querySelector('nav.main-nav').classList.toggle('open');
+  });
+</script>
+</body></html>
